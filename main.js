@@ -177,21 +177,22 @@ const observer = new IntersectionObserver((entries, observer) => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // ============================================
-// Dynamic Free Board Logic (LocalStorage Mock of Firebase)
+// Dynamic Free Board Logic (Firebase Firestore Integration)
 // ============================================
-const STORAGE_KEY = 'dmu_free_board_posts';
 
-// Initialize defaults if empty
-if(!localStorage.getItem(STORAGE_KEY)) {
-    const defaultPosts = [
-        { title: '안녕하세요. 신규 가입 인사드립니다.', date: '2026.05.07' },
-        { title: '로봇 암 제어 관련 질문이 있습니다.', date: '2026.05.06' },
-        { title: 'AMK 면접 후기 공유합니다.', date: '2026.05.05' },
-        { title: '캡스톤 디자인 팀원 급하게 구합니다! (1/4)', date: '2026.05.04' },
-        { title: '회로 설계 참고할만한 자료 있을까요?', date: '2026.05.02' }
-    ];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPosts));
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyDUKVjozyhOdE4Zuc4txRtSnzNkr-d0BAk",
+  authDomain: "homepage-4730b.firebaseapp.com",
+  projectId: "homepage-4730b",
+  storageBucket: "homepage-4730b.firebasestorage.app",
+  messagingSenderId: "765506795549",
+  appId: "1:765506795549:web:66ec403bdac2dfc833aef4",
+  measurementId: "G-D2H8MT9YYX"
+};
+
+// Initialize Firebase using compat SDK
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 function loadFreeBoard() {
     const listEl = document.getElementById('free-board-list');
@@ -199,23 +200,53 @@ function loadFreeBoard() {
     
     listEl.innerHTML = '<div class="board-item loading" style="text-align:center; color:#888;">데이터를 불러오는 중입니다...</div>';
     
-    // Simulate network delay
-    setTimeout(() => {
-        const posts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    db.collection("free_board_posts")
+      .orderBy("createdAt", "desc")
+      .limit(5)
+      .onSnapshot((snapshot) => {
         listEl.innerHTML = '';
-        posts.slice(0, 5).forEach(post => {
-            const div = document.createElement('div');
+        if (snapshot.empty) {
+            listEl.innerHTML = '<div class="board-item" style="text-align:center; color:#888;">등록된 게시글이 없습니다. 첫 글을 작성해 보세요!</div>';
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const post = doc.data();
+            const div = document.createElement('a'); // Make it an anchor tag
             div.className = 'board-item';
-            // Escaping basics to prevent XSS natively, though innerText is better
+            div.href = '#';
+            div.style.textDecoration = 'none';
+            div.style.color = 'inherit';
+            div.style.cursor = 'pointer';
+            
             div.innerHTML = `<span class="title"></span><span class="date">${post.date}</span>`;
             div.querySelector('.title').textContent = post.title;
+            
+            // Add click listener to view post
+            div.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('view-post-title').textContent = post.title;
+                document.getElementById('view-post-date').textContent = post.date;
+                // Use content if it exists, otherwise show a placeholder message
+                document.getElementById('view-post-content').textContent = post.content || '내용이 없습니다.';
+                openModal(document.getElementById('view-post-modal'));
+            });
+            
             listEl.appendChild(div);
         });
-    }, 400);
+    }, (error) => {
+        console.error("Error loading posts: ", error);
+        listEl.innerHTML = '<div class="board-item loading" style="text-align:center; color:red;">데이터를 불러오는데 실패했습니다. DB 규칙 설정을 확인해 주세요.</div>';
+    });
 }
 
 // Load dynamic board
 setTimeout(loadFreeBoard, 800);
+
+// View Form Handler
+const viewPostModal = document.getElementById('view-post-modal');
+const viewPostClose = document.querySelector('.view-post-close');
+if(viewPostClose) viewPostClose.addEventListener('click', () => closeModal(viewPostModal));
 
 // Write Form Handler
 const writeModal = document.getElementById('write-modal');
@@ -227,7 +258,7 @@ if(writePostBtn) writePostBtn.addEventListener('click', (e) => { e.preventDefaul
 if(writeClose) writeClose.addEventListener('click', () => closeModal(writeModal));
 
 if(writeForm) {
-    writeForm.addEventListener('submit', (e) => {
+    writeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const titleInput = document.getElementById('post-title').value;
         const contentInput = document.getElementById('post-content').value;
@@ -238,19 +269,23 @@ if(writeForm) {
         const dd = String(today.getDate()).padStart(2, '0');
         const dateStr = `2026.${mm}.${dd}`;
 
-        const newPost = { title: titleInput, content: contentInput, date: dateStr };
-        
-        const posts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        posts.unshift(newPost); // add to top
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-        
-        document.getElementById('post-title').value = '';
-        document.getElementById('post-content').value = '';
-        closeModal(writeModal);
-        
-        loadFreeBoard();
-        
-        setTimeout(() => alert('게시글이 성공적으로 등록되었습니다!'), 100);
+        try {
+            await db.collection("free_board_posts").add({
+                title: titleInput,
+                content: contentInput,
+                date: dateStr,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+            closeModal(writeModal);
+            
+            setTimeout(() => alert('게시글이 성공적으로 등록되었습니다!'), 100);
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("글 작성에 실패했습니다. (파이어베이스 보안 규칙을 확인해주세요)");
+        }
     });
 }
 

@@ -297,6 +297,18 @@
         </div>
     </div>
 
+    <!-- View Post Modal -->
+    <div class="modal overlay" id="view-post-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box" style="text-align: left;">
+            <button class="close-btn view-post-close" aria-label="창 닫기">✕</button>
+            <h2 id="view-post-title" style="margin-bottom: 10px; font-size: 24px;">게시글 제목</h2>
+            <p id="view-post-date" style="font-size: 14px; color: #888; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">2026.05.09</p>
+            <div id="view-post-content" style="font-size: 16px; line-height: 1.6; min-height: 150px; white-space: pre-wrap;">
+                게시글 내용이 여기에 표시됩니다.
+            </div>
+        </div>
+    </div>
+
     <!-- Search Overlay -->
     <div class="search-overlay" id="search-overlay">
         <button class="close-btn search-close">✕</button>
@@ -369,6 +381,8 @@
         </div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
