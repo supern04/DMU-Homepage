@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyundai Style School Homepage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div id="scroll-progress-container">
+            <div id="scroll-progress-bar"></div>
+        </div>
+        <div class="header-container">
+            <div class="logo">
+                <a href="#">DONGYANG <span style="font-weight:300">MIRAE</span></a>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4339/subview.do" target="_blank" data-i18n="nav_school">학교소개</a></li>
+                    <li><a href="#dept" data-i18n="nav_dept">학과소개</a></li>
+                    <li><a href="#portfolio" data-i18n="nav_portfolio">나의 포트폴리오</a></li>
+                    <li><a href="#company" data-i18n="nav_company">관련 회사</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4811/subview.do" target="_blank" data-i18n="nav_life">학교생활</a></li>
+                    <li><a href="#board" data-i18n="nav_board">게시판</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <div class="lang-dropdown">
+                    <span class="lang-select">KR ▾</span>
+                    <ul class="lang-menu">
+                        <li><a href="#" data-lang="KR">KR</a></li>
+                        <li><a href="#" data-lang="EN">EN</a></li>
+                        <li><a href="#" data-lang="CN">CN</a></li>
+                        <li><a href="#" data-lang="JP">JP</a></li>
+                    </ul>
+                </div>
+                <button class="icon-btn user-btn">👤</button>
+                <button class="icon-btn search-btn">🔍</button>
+                <button class="icon-btn menu-btn">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Slider Section -->
+        <section class="hero-slider">
+            <div class="slider-container">
+                <div class="slide active">
+                    <img src="hero1.jpg" alt="동양미래대학교 캠퍼스 전경">
+                    <div class="slide-content animate-on-load">
+                        <h1 style="font-size: 60px;" data-i18n="hero1_title">동양미래대학교<br>로봇소프트웨어과</h1>
+                        <p style="font-size: 24px; margin-top: 20px;" data-i18n="hero1_desc">현장 실무 중심의 미래 로봇 엔지니어 양성</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="hero2.jpg" alt="로봇 제어 기술 및 포트폴리오">
+                    <div class="slide-content animate-on-load">
+                        <h1 style="font-size: 60px;" data-i18n="hero2_title">Choung Seungmin<br>Portfolio</h1>
+                        <p style="font-size: 24px; margin-top: 20px;" data-i18n="hero2_desc">AMK Maintenance Engineer Candidate</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="hero3.jpg" alt="전자회로 분석 및 엔지니어링">
+                    <div class="slide-content animate-on-load">
+                        <h1 style="font-size: 60px;" data-i18n="hero3_title">트러블슈팅과<br>혁신적 문제해결</h1>
+                        <p style="font-size: 24px; margin-top: 20px;" data-i18n="hero3_desc">전자회로 분석 및 3D CAD 정밀 설계 역량</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Nav Arrows -->
+            <div class="hero-nav-arrow left-arrow">❮ <span class="nav-text">동양미래</span></div>
+            <div class="hero-nav-arrow right-arrow"><span class="nav-text">로봇SW과</span> ❯</div>
+
+            <div class="slider-bottom-controls">
+                <div class="slider-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <button class="pause-btn">II</button>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-line"></div>
+        </section>
+
+        <!-- Department Section -->
+        <section id="dept" class="content-section fade-in">
+            <div class="container">
+                <div class="section-image-text">
+                    <div class="text-content">
+                        <h2 data-i18n="dept_title">로봇소프트웨어과 학과소개</h2>
+                        <p data-i18n="dept_desc">미래 기술을 선도하는 현장 실무형 인재 양성! C, C++, Python 프로그래밍부터 하드웨어 회로 설계, 3D CAD까지 전문 지식을 체계적으로 배웁니다.</p>
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+                            <a href="https://www.dongyang.ac.kr/sites/dmu/index.do" target="_blank" class="primary-btn" style="background-color: var(--primary-color);" aria-label="동양미래대학교 홈페이지로 이동" data-i18n="btn_school">학교 홈페이지 가기 ❯</a>
+                            <a href="https://www.dongyang.ac.kr/dmu/4495/subview.do" target="_blank" class="primary-btn" aria-label="로봇소프트웨어과 학과 홈페이지로 이동" data-i18n="btn_dept">학과 홈페이지 가기 ❯</a>
+                        </div>
+                    </div>
+                    <div class="image-content ai-wrapper">
+                        <img src="sleek_robot_ai.png" alt="로봇소프트웨어과 미래 피지컬 AI 실습 이미지">
+                        <div class="ai-scanner-line"></div>
+                        <div class="ai-scanner-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="portfolio-section fade-in">
+            <div class="container">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <h2 style="margin-bottom: 0;" data-i18n="port_title">나의 포트폴리오 (Choung Seungmin)</h2>
+                    <a href="https://my-web-6f7k.vercel.app/" target="_blank" class="primary-btn" style="padding: 10px 25px;" aria-label="포트폴리오 전체 보기" data-i18n="btn_port_web">포트폴리오 웹사이트 가기 ❯</a>
+                </div>
+                <div class="portfolio-grid">
+                    <div class="portfolio-card">
+                        <img src="robot_arm_circuit.png" alt="자동화 로봇 암 제어 회로 설계 프로토타입">
+                        <div class="card-info">
+                            <h3>자동화 로봇 암 제어 회로 설계</h3>
+                            <span style="font-size: 14px;">노이즈 99% 제거, 발열 40% 개선으로 오작동 완벽 해결</span>
+                        </div>
+                    </div>
+                    <div class="portfolio-card">
+                        <img src="port2.jpg" alt="3D CAD 기반 로봇 하드웨어 도면 설계">
+                        <div class="card-info">
+                            <h3>3D CAD 기반 구조 개선 설계</h3>
+                            <span style="font-size: 14px;">조립 시간 40% 단축 및 0.1mm 정밀도 확보</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Company Section -->
+        <section id="company" class="company-section fade-in">
+            <div class="container">
+                <div class="section-header">
+                    <h2 data-i18n="comp_title">관련 회사 및 진출 분야</h2>
+                    <span style="font-size: 14px; color: #007fa8; font-weight: 500; margin-left: 20px; vertical-align: bottom;" data-i18n="comp_notice">* 회사 태그를 클릭하시면 공식 홈페이지로 연결됩니다.</span>
+                </div>
+                <div class="company-grid">
+                    <!-- Category 1 -->
+                    <div class="company-card">
+                        <img src="comp1.jpg" alt="로봇 제조사">
+                        <div class="company-icon">⚙️</div>
+                        <h3>로봇 전문 제조사 및 대기업</h3>
+                        <span class="company-subtitle">로봇 제어 및 펌웨어</span>
+                        <p>전통적인 산업용 로봇이나 최근 주목받는 협동 로봇, 휴머노이드를 제작합니다. 하드웨어의 움직임을 정밀하게 제어하는 C/C++ 기반 펌웨어 개발 및 MCU 프로그래밍 역량이 핵심입니다.</p>
+                        <div class="company-roles"><strong>주요 직무:</strong> 로봇 모션 제어, 모터 및 센서 연동, 임베디드 SW 개발</div>
+                        <div class="company-tags">
+                            <a href="http://www.hd-hyundairobotics.com" target="_blank" aria-label="HD현대로보틱스">HD현대로보틱스</a>
+                            <a href="https://www.doosanrobotics.com" target="_blank" aria-label="두산로보틱스">두산로보틱스</a>
+                            <a href="https://www.hanwharobotics.com" target="_blank" aria-label="한화로보틱스">한화로보틱스</a>
+                            <a href="https://www.rainbow-robotics.com" target="_blank" aria-label="레인보우로보틱스">레인보우로보틱스</a>
+                            <a href="https://neuromeka.com" target="_blank" aria-label="뉴로메카">뉴로메카</a>
+                        </div>
+                    </div>
+                    <!-- Category 2 -->
+                    <div class="company-card">
+                        <img src="mobility_robot_ai.png" alt="자율주행 및 모빌리티">
+                        <div class="company-icon">🚙</div>
+                        <h3>자율주행 및 모빌리티 로봇 기업</h3>
+                        <span class="company-subtitle">자율주행 및 관제 시스템</span>
+                        <p>식당 서빙 로봇이나 물류 센터 자율주행 로봇(AMR, AGV)을 개발합니다. 여러 로봇의 상태를 실시간으로 모니터링하고 제어하는 관제 시스템(FMS) 구축도 매우 중요합니다.</p>
+                        <div class="company-roles"><strong>주요 직무:</strong> 자율주행(SLAM/Navigation) SW, 로봇 웹 관제 플랫폼 구축</div>
+                        <div class="company-tags">
+                            <a href="https://www.bearrobotics.ai" target="_blank" aria-label="베어로보틱스">베어로보틱스</a>
+                            <a href="https://www.hyundaimotorgroup.com" target="_blank" aria-label="현대자동차(로보틱스랩)">현대자동차(로보틱스랩)</a>
+                            <a href="https://www.woowahan.com" target="_blank" aria-label="우아한형제들">우아한형제들</a>
+                            <a href="https://www.coupang.jobs" target="_blank" aria-label="쿠팡">쿠팡</a>
+                            <a href="https://www.robotis.com" target="_blank" aria-label="로보티즈">로보티즈</a>
+                        </div>
+                    </div>
+                    <!-- Category 3 -->
+                    <div class="company-card">
+                        <img src="comp3.jpg" alt="스마트팩토리 설비">
+                        <div class="company-icon">🏭</div>
+                        <h3>스마트팩토리 및 자동화 설비 기업</h3>
+                        <span class="company-subtitle">공장 자동화 및 SI</span>
+                        <p>로봇을 활용해 전체 공장이나 물류 센터의 자동화 시스템을 설계하고 통합합니다. 릴레이, SSR 등의 산업용 전자 부품 이해도와 PLC를 활용한 시퀀스 제어가 필수적입니다.</p>
+                        <div class="company-roles"><strong>주요 직무:</strong> 공장 자동화(FA) 시스템 통합, 로봇 SI, 전장 설계</div>
+                        <div class="company-tags">
+                            <a href="https://www.lselectric.co.kr" target="_blank" aria-label="LS일렉트릭">LS일렉트릭</a>
+                            <a href="https://www.poscodx.com" target="_blank" aria-label="포스코DX">포스코DX</a>
+                            <a href="https://www.hyundai-autoever.com" target="_blank" aria-label="현대오토에버">현대오토에버</a>
+                            <a href="https://www.sfa.co.kr" target="_blank" aria-label="SFA">SFA</a>
+                            <a href="https://www.smcore.com" target="_blank" aria-label="에스엠코어">에스엠코어</a>
+                        </div>
+                    </div>
+                    <!-- Category 4 -->
+                    <div class="company-card">
+                        <img src="comp4.jpg" alt="IT 및 AI 기술">
+                        <div class="company-icon">🔬</div>
+                        <h3>IT 기업 및 국책 연구기관</h3>
+                        <span class="company-subtitle">AI 및 차세대 기술</span>
+                        <p>인공지능을 로봇에 접목시키거나, 객체 인식과 같은 비전 기반 로봇 제어 등 선행 기술을 앞장서서 연구하고 시스템화 하는 기관입니다.</p>
+                        <div class="company-roles"><strong>주요 직무:</strong> 비전 AI (객체 인식), 로봇 미들웨어(ROS/ROS2) 아키텍처 개발</div>
+                        <div class="company-tags">
+                            <a href="https://research.samsung.com" target="_blank" aria-label="삼성전자(Research)">삼성전자(Research)</a>
+                            <a href="https://www.lge.co.kr/robots" target="_blank" aria-label="LG전자">LG전자</a>
+                            <a href="https://www.naverlabs.com" target="_blank" aria-label="네이버랩스">네이버랩스</a>
+                            <a href="https://www.keti.re.kr/main/main.php" target="_blank" aria-label="한국전자기술연구원">한국전자기술연구원</a>
+                            <a href="https://www.kimm.re.kr/" target="_blank" aria-label="한국기계연구원">한국기계연구원</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Content Sections -->
+        <section id="board" class="board-section fade-in">
+            <div class="container board-flex-container">
+                <!-- Notice Board -->
+                <div class="board-half">
+                    <div class="section-header">
+                        <h2 data-i18n="board_notice">공지사항</h2>
+                        <a href="https://www.dongyang.ac.kr/dmu/4903/subview.do" target="_blank" class="more-btn">전체보기 +</a>
+                    </div>
+                    <div class="board-container">
+                        <div class="board-list" id="board-list">
+                            <div class="board-item loading">데이터를 불러오는 중입니다...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Free Board (Dynamic) -->
+                <div class="board-half">
+                    <div class="section-header">
+                        <h2 data-i18n="board_free">자유게시판 (Community)</h2>
+                        <button id="write-post-btn" class="more-btn" style="background:none; border:none; cursor:pointer;" aria-label="새 글 작성하기">글쓰기 ✎</button>
+                    </div>
+                    <div class="board-container">
+                        <div class="board-list" id="free-board-list">
+                            <!-- JS will populate this -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Chatbot -->
+    <div class="chatbot-floating" id="chatbot-btn" aria-label="챗봇 열기">
+        <div class="bot-icon">💬</div>
+    </div>
+    
+    <!-- Chatbot Window -->
+    <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+            <h3>DMU AI 챗봇</h3>
+            <button class="close-chat" id="close-chat">✕</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot">안녕하세요! 동양미래대학교 로봇소프트웨어과 AI 챗봇입니다. 무엇을 도와드릴까요?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="메시지를 입력하세요..." aria-label="채팅 입력">
+            <button id="chat-send">전송</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal overlay" id="login-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box">
+            <button class="close-btn login-close" aria-label="창 닫기">✕</button>
+            <h2>Welcome Back</h2>
+            <p>동양미래대학교 웹사이트에 오신 것을 환영합니다.</p>
+            <form class="login-form">
+                <input type="text" placeholder="아이디" required aria-label="아이디">
+                <input type="password" placeholder="비밀번호" required aria-label="비밀번호">
+                <button type="submit" class="primary-btn login-submit">로그인</button>
+            </form>
+            <div class="modal-links">
+                <a href="#">아이디 찾기</a>
+                <span class="divider">|</span>
+                <a href="#">비밀번호 찾기</a>
+                <span class="divider">|</span>
+                <a href="#">회원가입</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Write Post Modal (Dynamic Board) -->
+    <div class="modal overlay" id="write-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box">
+            <button class="close-btn write-close" aria-label="창 닫기">✕</button>
+            <h2>새 게시글 작성</h2>
+            <p>자유롭게 여러분의 의견을 남겨주세요. (Firebase 기능 연동 가능)</p>
+            <form id="write-form" style="margin-top:20px;">
+                <input type="text" id="post-title" placeholder="게시글 제목을 입력하세요" required style="width:100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" aria-label="제목">
+                <textarea id="post-content" placeholder="내용을 입력하세요..." required style="width: 100%; height: 120px; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; resize:none;" aria-label="내용"></textarea>
+                <button type="submit" class="primary-btn" style="width:100%; font-size:16px;">게시글 등록하기</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay">
+        <button class="close-btn search-close">✕</button>
+        <div class="search-container">
+            <h2 style="margin-bottom: 20px; font-weight: 300;">무엇을 찾으십니까?</h2>
+            <div class="search-bar">
+                <input type="text" id="main-search-input" placeholder="검색어를 입력해주세요.">
+                <button class="icon-btn" id="main-search-btn">🔍</button>
+            </div>
+            <div class="popular-searches">
+                <span>인기 검색어:</span>
+                <a href="#">수강신청</a>
+                <a href="#">장학금</a>
+                <a href="#">학사일정</a>
+                <a href="#">취업정보</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Screen Menu -->
+    <div class="full-menu" id="full-menu">
+        <button class="close-btn menu-close">✕</button>
+        <div class="full-menu-container">
+            <div class="menu-column">
+                <h3>학교소개</h3>
+                <ul>
+                    <li><a href="#">총장인사말</a></li>
+                    <li><a href="#">건학이념</a></li>
+                    <li><a href="#">연혁</a></li>
+                    <li><a href="#">캠퍼스 맵</a></li>
+                    <li><a href="#">오시는 길</a></li>
+                </ul>
+            </div>
+            <div class="menu-column">
+                <h3>학과소개</h3>
+                <ul>
+                    <li><a href="#">로봇소프트웨어과</a></li>
+                    <li><a href="#">기계공학부</a></li>
+                    <li><a href="#">전기전자통신공학부</a></li>
+                    <li><a href="#">컴퓨터공학부</a></li>
+                    <li><a href="#">경영학부</a></li>
+                </ul>
+            </div>
+            <div class="menu-column">
+                <h3>학교생활</h3>
+                <ul>
+                    <li><a href="#">학사일정</a></li>
+                    <li><a href="#">수강신청</a></li>
+                    <li><a href="#">장학안내</a></li>
+                    <li><a href="#">증명서 발급</a></li>
+                    <li><a href="#">학식 메뉴</a></li>
+                </ul>
+            </div>
+            <div class="menu-column">
+                <h3>포트폴리오 & 기업</h3>
+                <ul>
+                    <li><a href="#">Choung Seungmin</a></li>
+                    <li><a href="#">학생 우수작</a></li>
+                    <li><a href="#">산학협력단</a></li>
+                    <li><a href="#">가족회사 안내</a></li>
+                    <li><a href="#">취업 지원 센터</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p data-i18n="footer_text">&copy; 2026 Dongyang Mirae University - Robot Software Dept. & Seung-Min Portfolio.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
