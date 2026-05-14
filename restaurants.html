@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학교 근처 맛집 지도</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .map-hero {
+            padding: 80px 0 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+        }
+        .map-container {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 40px 0;
+            position: relative;
+        }
+        .rankings-section {
+            padding: 60px 0;
+            background: #fff;
+        }
+        .ranking-card {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border-left: 5px solid var(--primary-color, #005a8f);
+        }
+        .ranking-card:hover {
+            transform: translateY(-5px);
+        }
+        .rank-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ccc;
+            min-width: 60px;
+            text-align: center;
+        }
+        .rank-number.gold { color: #FFD700; }
+        .rank-number.silver { color: #C0C0C0; }
+        .rank-number.bronze { color: #CD7F32; }
+        
+        .rank-content h3 {
+            margin: 0 0 5px 0;
+            font-size: 20px;
+            color: #333;
+        }
+        .rank-content p {
+            margin: 0;
+            color: #666;
+            font-size: 15px;
+        }
+        .rank-tags {
+            margin-top: 10px;
+        }
+        .rank-tag {
+            display: inline-block;
+            background: #eef2f5;
+            color: var(--primary-color, #005a8f);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html">DONGYANG <span style="font-weight:300">MIRAE</span></a>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html#dept" data-i18n="nav_dept">학교 및 학과 소개</a></li>
+                    <li><a href="index.html#portfolio" data-i18n="nav_portfolio">나의 포트폴리오</a></li>
+                    <li><a href="index.html#company" data-i18n="nav_company">관련 회사</a></li>
+                    <li><a href="restaurants.html" data-i18n="nav_map">학교 근처 맛집</a></li>
+                    <li><a href="index.html#board" data-i18n="nav_board">게시판</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <div class="lang-dropdown">
+                    <span class="lang-select">KR ▾</span>
+                    <ul class="lang-menu">
+                        <li><a href="#" data-lang="KR">KR</a></li>
+                        <li><a href="#" data-lang="EN">EN</a></li>
+                        <li><a href="#" data-lang="CN">CN</a></li>
+                        <li><a href="#" data-lang="JP">JP</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="map-hero">
+            <div class="container">
+                <h1 style="font-size: 48px; margin-bottom: 15px;" data-i18n="map_title">학교 근처 맛집 지도</h1>
+                <p style="font-size: 20px; color: #555;">제가 직접 가보고 추천하는 동양미래대 주변 핫플레이스입니다!</p>
+                
+                <div class="map-container">
+                    <iframe src="https://map.naver.com/p/search/%EB%8F%99%EC%96%91%EB%AF%B8%EB%9E%98%EB%8C%80%ED%95%99%EA%B5%90%20%EA%B7%BC%EC%B2%98%20%EB%A7%9B%EC%A7%91?searchType=place&c=16.19,0,0,0,dh" width="100%" height="100%" frameborder="0" style="border:none;" title="동양미래대 주변 맛집"></iframe>
+                    <div style="position: absolute; bottom: 20px; right: 20px; background: #03c75a; border-radius: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                        <a href="https://map.naver.com/p/search/%EB%8F%99%EC%96%91%EB%AF%B8%EB%9E%98%EB%8C%80%ED%95%99%EA%B5%90%20%EA%B7%BC%EC%B2%98%20%EB%A7%9B%EC%A7%91?searchType=place&c=16.19,0,0,0,dh" target="_blank" style="display: block; color: white; text-decoration: none; font-size: 15px; padding: 12px 20px; font-weight: 500;">
+                            네이버 지도 크게 보기 ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rankings-section">
+            <div class="container">
+                <div class="section-header" style="text-align: left; margin-bottom: 40px;">
+                    <h2 style="font-size: 32px; border-bottom: 2px solid #eee; padding-bottom: 15px;">🏆 나의 개인적인 맛집 TOP 순위</h2>
+                </div>
+
+                <!-- 1위 -->
+                <div class="ranking-card">
+                    <div class="rank-number gold">1</div>
+                    <div class="rank-content">
+                        <h3>고척 칼국수</h3>
+                        <p>동양미래대 인근 최고의 칼국수 맛집! 시원한 국물과 쫄깃한 면발이 지친 학생들의 속을 확 풀어줍니다.</p>
+                        <div class="rank-tags">
+                            <span class="rank-tag">가성비 최고</span>
+                            <span class="rank-tag">점심특선</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2위 -->
+                <div class="ranking-card">
+                    <div class="rank-number silver">2</div>
+                    <div class="rank-content">
+                        <h3>고척 돈까스</h3>
+                        <p>바삭한 수제 돈까스가 일품입니다. 공강 시간에 든든하고 빠르게 한 끼 식사하기 좋은 맛집입니다.</p>
+                        <div class="rank-tags">
+                            <span class="rank-tag">혼밥 환영</span>
+                            <span class="rank-tag">겉바속촉</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3위 -->
+                <div class="ranking-card">
+                    <div class="rank-number bronze">3</div>
+                    <div class="rank-content">
+                        <h3>전주식당</h3>
+                        <p>진정한 집밥 감성을 느낄 수 있는 곳입니다. 특히 양념이 잘 밴 제육볶음은 이 근처에서 따라올 곳이 없는 최고의 제육 맛집입니다!</p>
+                        <div class="rank-tags">
+                            <span class="rank-tag">제육볶음 성지</span>
+                            <span class="rank-tag">집밥 스타일</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; color: #888; font-style: italic; margin-top: 40px; font-size: 14px;">본 순위는 제 개인적인 입맛에 철저히 기반하여 작성되었습니다! 🤤</p>
+            </div>
+        </section>
+
+        <!-- Restaurant Board Section -->
+        <section class="board-section" id="restaurant-board" style="padding-top: 40px; padding-bottom: 80px; background: #fff;">
+            <div class="container" style="max-width: 1000px; margin: 0 auto;">
+                <div class="section-header" style="justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px;">
+                    <h2 style="font-size: 28px;">💬 여러분들이 먹었던 맛집도 추천해주세요!</h2>
+                    <button id="write-rest-btn" class="primary-btn" style="border:none; cursor:pointer;" aria-label="새 맛집 추천하기">추천 글쓰기 ✎</button>
+                </div>
+                <div class="board-container" style="border: 1px solid #eaeaea; border-radius: 8px; padding: 10px;">
+                    <div class="board-list" id="rest-board-list">
+                        <div class="board-item loading" style="text-align:center; color:#888;">게시글을 불러오는 중입니다. 잠시만 기다려주세요...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Write Post Modal (Restaurant Board) -->
+    <div class="modal overlay" id="write-rest-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box">
+            <button class="close-btn write-rest-close" aria-label="창 닫기">✕</button>
+            <h2>나만의 맛집 추천하기</h2>
+            <p style="margin-bottom: 20px;">직접 다녀온 숨겨진 꿀맛 식당을 학우들에게 소개해주세요!</p>
+            <form id="write-rest-form">
+                <input type="text" id="rest-post-title" placeholder="어떤 음식점인가요? (상호명 필수)" required style="width:100%; padding: 15px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" aria-label="제목">
+                <textarea id="rest-post-content" placeholder="무엇이 맛있었는지 이유를 자유롭게 적어주세요!" required style="width: 100%; height: 140px; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; resize:none;" aria-label="내용"></textarea>
+                <button type="submit" class="primary-btn" style="width:100%; font-size:16px;">추천 등록하기</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Post Modal (Restaurant Board) -->
+    <div class="modal overlay" id="view-rest-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box" style="text-align: left;">
+            <button class="close-btn view-rest-close" aria-label="창 닫기">✕</button>
+            <h2 id="view-rest-title" style="margin-bottom: 10px; font-size: 24px;">상호명</h2>
+            <p id="view-rest-date" style="font-size: 14px; color: #888; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">2026.05.09</p>
+            <div id="view-rest-content" style="font-size: 16px; line-height: 1.6; min-height: 150px; white-space: pre-wrap;">
+                추천 내용이 여기에 표시됩니다.
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p data-i18n="footer_text">&copy; 2026 Dongyang Mirae University - Robot Software Dept. & Seung-Min Portfolio.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs are typically required for main.js if included -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

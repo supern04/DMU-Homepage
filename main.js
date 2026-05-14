@@ -8,6 +8,7 @@ let currentSlide = 0;
 let slideInterval;
 
 function showSlide(n) {
+    if (slides.length === 0) return;
     slides.forEach(slide => slide.classList.remove('active'));
     dots.forEach(dot => dot.classList.remove('active'));
     
@@ -34,6 +35,7 @@ function prevSlide() {
 }
 
 function startAutoSlide() {
+    if (slides.length === 0) return;
     stopAutoSlide();
     slideInterval = setInterval(nextSlide, 5000);
 }
@@ -64,12 +66,18 @@ showSlide(0);
 startAutoSlide();
 
 // Board Data Rendering
-const boardData = [
-    { title: '[공지] 동양미래대학교 로봇소프트웨어과 로봇 제작 심화 과정 신청 안내', date: '2026.05.07' },
-    { title: '[포트폴리오] 캡스톤 디자인 경진대회 예선 참가자 명단 발표', date: '2026.05.05' },
-    { title: '[동아리] MAS, MCA, SMART 등 전공동아리 신입 부원 모집', date: '2026.05.03' },
-    { title: '[취업] AMK CE (Customer Engineer) 부문 캠퍼스 리크루팅 안내', date: '2026.04.30' },
-    { title: '[장학] 2026학년도 1학기 로봇소프트웨어과 성적 및 실습 우수 장학금 신청', date: '2026.04.28' }
+const _td = new Date();
+const _yyyy = _td.getFullYear();
+const _mm = String(_td.getMonth() + 1).padStart(2, '0');
+const _dd = String(_td.getDate()).padStart(2, '0');
+const _dynamicToday = `${_yyyy}.${_mm}.${_dd}`;
+
+let boardData = [
+    { title: '[공지] 동양미래대학교 로봇소프트웨어과 로봇 제작 심화 과정 신청 안내', date: _dynamicToday, link: 'https://www.dongyang.ac.kr/dmu/4903/subview.do' },
+    { title: '[포트폴리오] 캡스톤 디자인 경진대회 예선 참가자 명단 발표', date: _dynamicToday, link: 'https://www.dongyang.ac.kr/dmu/4903/subview.do' },
+    { title: '[동아리] MAS, MCA, SMART 등 전공동아리 신입 부원 모집', date: _dynamicToday, link: 'https://www.dongyang.ac.kr/dmu/4903/subview.do' },
+    { title: '[취업] AMK CE (Customer Engineer) 부문 캠퍼스 리크루팅 안내', date: _dynamicToday, link: 'https://www.dongyang.ac.kr/dmu/4903/subview.do' },
+    { title: '[장학] 2026학년도 1학기 로봇소프트웨어과 성적 및 실습 우수 장학금 신청', date: _dynamicToday, link: 'https://www.dongyang.ac.kr/dmu/4903/subview.do' }
 ];
 
 const boardList = document.getElementById('board-list');
@@ -79,7 +87,7 @@ function renderBoard() {
     boardList.innerHTML = '';
     boardData.forEach(item => {
         const boardItem = document.createElement('a'); // Change to anchor tag
-        boardItem.href = 'https://www.dongyang.ac.kr/dmu/4903/subview.do';
+        boardItem.href = item.link || 'https://www.dongyang.ac.kr/dmu/4903/subview.do';
         boardItem.target = '_blank';
         boardItem.className = 'board-item';
         boardItem.style.textDecoration = 'none';
@@ -92,7 +100,74 @@ function renderBoard() {
     });
 }
 
-setTimeout(renderBoard, 800);
+// Fetch real-time notices via proxy bypass
+async function fetchRealNotices() {
+    try {
+        const url = 'https://www.dongyang.ac.kr/dmu/4904/subview.do';
+        // Try codetabs proxy as alternative if allorigins is blocked by the university
+        const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
+        
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const html = await response.text();
+        
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const notices = [];
+        // Extract rows from typical K2Web board table structure
+        const rows = doc.querySelectorAll('.board-table tbody tr');
+        rows.forEach(row => {
+            const titleEl = row.querySelector('.td-subject a');
+            const dateEl = row.querySelector('.td-date');
+            
+            if (titleEl && titleEl.textContent.trim()) {
+                let link = titleEl.getAttribute('href');
+                if (link && !link.startsWith('http')) {
+                    if (link.startsWith('?')) {
+                        link = 'https://www.dongyang.ac.kr/dmu/4904/subview.do' + link;
+                    } else if (link.startsWith('/')) {
+                        link = 'https://www.dongyang.ac.kr' + link;
+                    } else {
+                        link = 'https://www.dongyang.ac.kr/dmu/4904/' + link;
+                    }
+                }
+
+                // Force K2Web to include the site CSS layout instead of the raw JSP print view
+                if (link && link.includes('/bbs/') && !link.includes('layout=')) {
+                    link += (link.includes('?') ? '&' : '?') + 'layout=unknown';
+                }
+                
+                // Use the current date based on access time
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                const todayStr = `${yyyy}.${mm}.${dd}`;
+
+                notices.push({
+                    title: titleEl.textContent.trim().replace(/\s+/g, ' '),
+                    date: todayStr,
+                    link: link || url
+                });
+            }
+        });
+
+        if (notices.length > 0) {
+            boardData = notices.slice(0, 5); // Display top 5
+        } else {
+            console.warn("Could not parse dynamic notices, rendering static fallback");
+        }
+    } catch (error) {
+        console.error("Failed to fetch real-time notices. Using fallback boardData:", error);
+    } finally {
+        renderBoard();
+    }
+}
+
+// Initial Call
+setTimeout(fetchRealNotices, 800);
 
 // Interactive UI Modals & Overlays
 const userBtn = document.querySelector('.user-btn');
@@ -198,7 +273,7 @@ function loadFreeBoard() {
     const listEl = document.getElementById('free-board-list');
     if(!listEl) return;
     
-    listEl.innerHTML = '<div class="board-item loading" style="text-align:center; color:#888;">데이터를 불러오는 중입니다...</div>';
+    listEl.innerHTML = '<div class="board-item loading" style="text-align:center; color:#888;">게시글을 불러오는 중입니다. 잠시만 기다려주세요...</div>';
     
     db.collection("free_board_posts")
       .orderBy("createdAt", "desc")
@@ -290,6 +365,90 @@ if(writeForm) {
 }
 
 // ============================================
+// Restaurant Recommendation Board Logic
+// ============================================
+function loadRestBoard() {
+    const listEl = document.getElementById('rest-board-list');
+    if(!listEl) return;
+    
+    db.collection("rest_board_posts")
+      .orderBy("createdAt", "desc")
+      .limit(10)
+      .onSnapshot((snapshot) => {
+        listEl.innerHTML = '';
+        if (snapshot.empty) {
+            listEl.innerHTML = '<div class="board-item" style="text-align:center; color:#888;">등록된 맛집 추천이 없습니다. 첫 글을 작성해 보세요!</div>';
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const post = doc.data();
+            const div = document.createElement('a');
+            div.className = 'board-item';
+            div.href = '#';
+            div.style.textDecoration = 'none'; div.style.color = 'inherit'; div.style.cursor = 'pointer';
+            
+            div.innerHTML = `<span class="title">😋 ${post.title}</span><span class="date">${post.date}</span>`;
+            
+            div.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('view-rest-title').textContent = post.title;
+                document.getElementById('view-rest-date').textContent = post.date;
+                document.getElementById('view-rest-content').textContent = post.content || '내용이 없습니다.';
+                openModal(document.getElementById('view-rest-modal'));
+            });
+            
+            listEl.appendChild(div);
+        });
+    }, (error) => {
+        console.error("Error loading rest posts: ", error);
+        listEl.innerHTML = '<div class="board-item loading" style="text-align:center; color:red;">데이터를 불러오는데 실패했습니다.</div>';
+    });
+}
+setTimeout(loadRestBoard, 800);
+
+const writeRestModal = document.getElementById('write-rest-modal');
+const writeRestClose = document.querySelector('.write-rest-close');
+const writeRestBtn = document.getElementById('write-rest-btn');
+const writeRestForm = document.getElementById('write-rest-form');
+
+if(writeRestBtn) writeRestBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(writeRestModal); });
+if(writeRestClose) writeRestClose.addEventListener('click', () => closeModal(writeRestModal));
+
+if(writeRestForm) {
+    writeRestForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const titleInput = document.getElementById('rest-post-title').value;
+        const contentInput = document.getElementById('rest-post-content').value;
+        
+        const today = new Date();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const dateStr = `2026.${mm}.${dd}`;
+
+        try {
+            await db.collection("rest_board_posts").add({
+                title: titleInput,
+                content: contentInput,
+                date: dateStr,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('rest-post-title').value = '';
+            document.getElementById('rest-post-content').value = '';
+            closeModal(writeRestModal);
+            setTimeout(() => alert('추천 맛집이 성공적으로 등록되었습니다!'), 100);
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("글 작성에 실패했습니다.");
+        }
+    });
+}
+
+const viewRestModal = document.getElementById('view-rest-modal');
+const viewRestClose = document.querySelector('.view-rest-close');
+if(viewRestClose) viewRestClose.addEventListener('click', () => closeModal(viewRestModal));
+
+// ============================================
 // Language Switching Logic (i18n)
 // ============================================
 
@@ -297,7 +456,7 @@ const translations = {
     KR: {
         lang_name: 'KR',
         nav_school: '학교소개',
-        nav_dept: '학과소개',
+        nav_dept: '학교 및 학과 소개',
         nav_portfolio: '나의 포트폴리오',
         nav_company: '관련 회사',
         nav_life: '학교생활',
@@ -318,6 +477,8 @@ const translations = {
         comp_notice: '* 회사 태그를 클릭하시면 공식 홈페이지로 연결됩니다.',
         board_notice: '공지사항',
         board_free: '자유게시판 (Community)',
+        nav_map: '학교 근처 맛집',
+        map_title: '학교 근처 맛집 지도',
         footer_text: '© 2026 동양미래대학교 - 로봇소프트웨어과 & 정승민 포트폴리오'
     },
     EN: {
@@ -344,6 +505,8 @@ const translations = {
         comp_notice: '* Click company tags to visit official websites.',
         board_notice: 'Notice',
         board_free: 'Community Board',
+        nav_map: 'Restaurant Map',
+        map_title: 'Restaurants Near Campus',
         footer_text: '© 2026 Dongyang Mirae Univ - Robot Software Dept. & Seungmin Portfolio'
     },
     CN: {
@@ -370,6 +533,8 @@ const translations = {
         comp_notice: '* 点击企业标签即可访问官网。',
         board_notice: '公告事项',
         board_free: '自由论坛',
+        nav_map: '周边美食',
+        map_title: '校园周边美食地图',
         footer_text: '© 2026 东洋未来大学 - 机器人软件系 & 郑承敏作品集'
     },
     JP: {
