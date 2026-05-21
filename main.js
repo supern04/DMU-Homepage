@@ -9,21 +9,36 @@ let slideInterval;
 
 function showSlide(n) {
     if (slides.length === 0) return;
-    slides.forEach(slide => slide.classList.remove('active'));
+    
+    // Smooth transition
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+        const content = slide.querySelector('.slide-content');
+        if (content) content.classList.remove('animate');
+    });
     dots.forEach(dot => dot.classList.remove('active'));
     
     currentSlide = (n + slides.length) % slides.length;
     
-    slides[currentSlide].classList.add('active');
+    const activeSlide = slides[currentSlide];
+    activeSlide.classList.add('active');
     dots[currentSlide].classList.add('active');
     
-    // Reset scroll line animation
-    scrollLine.style.transition = 'none';
-    scrollLine.style.width = '0';
+    // Trigger text animation
     setTimeout(() => {
-        scrollLine.style.transition = 'width 5s linear';
-        scrollLine.style.width = '200px'; // Hyundai-style progress line
-    }, 50);
+        const content = activeSlide.querySelector('.slide-content');
+        if (content) content.classList.add('animate');
+    }, 100);
+    
+    // Reset scroll line animation
+    if (scrollLine) {
+        scrollLine.style.transition = 'none';
+        scrollLine.style.width = '0';
+        setTimeout(() => {
+            scrollLine.style.transition = 'width 5s linear';
+            scrollLine.style.width = '100px'; 
+        }, 50);
+    }
 }
 
 function nextSlide() {
@@ -461,14 +476,14 @@ const translations = {
         nav_company: '관련 회사',
         nav_life: '학교생활',
         nav_board: '게시판',
-        hero1_title: '동양미래대학교<br>로봇소프트웨어과',
-        hero1_desc: '현장 실무 중심의 미래 로봇 엔지니어 양성',
+        hero1_title: '2027학년도 신입생을 위한<br>로봇소프트웨어과 가이드',
+        hero1_desc: '동양미래대학교의 새로운 가상 공간에 오신 것을 환영합니다.',
         hero2_title: 'Choung Seungmin<br>Portfolio',
         hero2_desc: 'AMK Maintenance Engineer Candidate',
-        hero3_title: '트러블슈팅과<br>혁신적 문제해결',
-        hero3_desc: '전자회로 분석 및 3D CAD 정밀 설계 역량',
-        dept_title: '로봇소프트웨어과 학과소개',
-        dept_desc: '미래 기술을 선도하는 현장 실무형 인재 양성! C, C++, Python 프로그래밍부터 하드웨어 회로 설계, 3D CAD까지 전문 지식을 체계적으로 배웁니다.',
+        hero3_title: '동양미래대학교 X 고척스카이돔',
+        hero3_desc: '국내 최고 수준의 인프라와 함께하는 문화/스포츠 중심지',
+        dept_title: '로봇소프트웨어과 신입생 안내',
+        dept_desc: '미래 기술을 선도하는 현장 실무형 인재가 되기 위한 첫걸음! 2027학년도 신입생 여러분의 입학을 진심으로 축하하며, 학과 생활의 모든 것을 여기서 확인하세요.',
         btn_school: '학교 홈페이지 가기 ❯',
         btn_dept: '학과 홈페이지 가기 ❯',
         port_title: '나의 포트폴리오 (Choung Seungmin)',
@@ -479,7 +494,7 @@ const translations = {
         board_free: '자유게시판 (Community)',
         nav_map: '학교 근처 맛집',
         map_title: '학교 근처 맛집 지도',
-        footer_text: '© 2026 동양미래대학교 - 로봇소프트웨어과 & 정승민 포트폴리오'
+        footer_text: '© 2027 동양미래대학교 - 로봇소프트웨어과 & 정승민 포트폴리오'
     },
     EN: {
         lang_name: 'EN',
@@ -489,12 +504,12 @@ const translations = {
         nav_company: 'Companies',
         nav_life: 'Campus Life',
         nav_board: 'Board',
-        hero1_title: 'Dongyang Mirae Univ.<br>Robot Software',
-        hero1_desc: 'Training future robot engineers with hands-on expertise',
+        hero1_title: '2027 Freshmen Guide<br>Robot Software Dept.',
+        hero1_desc: 'Welcome to the new virtual space of Dongyang Mirae University.',
         hero2_title: 'Choung Seungmin<br>Portfolio',
         hero2_desc: 'AMK Maintenance Engineer Candidate',
-        hero3_title: 'Troubleshooting &<br>Innovative Solutions',
-        hero3_desc: 'Circuit Analysis & 3D CAD Precision Design',
+        hero3_title: 'Dongyang Mirae Univ X Gocheok Skydome',
+        hero3_desc: 'Cultural & Sports Hub with Top-tier Infrastructure',
         dept_title: 'Department Introduction',
         dept_desc: 'Nurturing future leaders in technology! Systematically learning everything from C/C++/Python to hardware design and 3D CAD.',
         btn_school: 'Go to Univ. Website ❯',
@@ -517,12 +532,12 @@ const translations = {
         nav_company: '相关企业',
         nav_life: '校园生活',
         nav_board: '公告栏',
-        hero1_title: '东洋未来大学<br>机器人软件系',
-        hero1_desc: '培养以现场实务为中心的未来机器人工程师',
+        hero1_title: '2027学年度新生指南<br>机器人软件系',
+        hero1_desc: '欢迎来到东洋未来大学的新型虚拟空间。',
         hero2_title: 'Choung Seungmin<br>Portfolio',
         hero2_desc: 'AMK 维修工程师候选人',
-        hero3_title: '故障排除与<br>创新解决方案',
-        hero3_desc: '电子电路分析及 3D CAD 精密设计能力',
+        hero3_title: '东洋未来大学 X 高尺天空巨蛋',
+        hero3_desc: '拥有国内顶尖基础设施的文化与体育中心',
         dept_title: '机器人软件系专业介绍',
         dept_desc: '培养引领未来技术的现场实务型人才！系统学习从 C、C++、Python 编程到硬件电路设计、3D CAD 等专业知识。',
         btn_school: '访问学校官网 ❯',
@@ -545,12 +560,12 @@ const translations = {
         nav_company: '関連企業',
         nav_life: '学生生活',
         nav_board: '掲示板',
-        hero1_title: '東洋未来大学<br>ロボットソフトウェア学科',
-        hero1_desc: '現場実務中心の未来ロボットエンジニア養成',
+        hero1_title: '2027年度新入生ガイド<br>ロボットソフトウェア学科',
+        hero1_desc: '東洋未来大学の新しい仮想空間へようこそ。',
         hero2_title: 'Choung Seungmin<br>Portfolio',
         hero2_desc: 'AMK メンテナンスエンジニア候補',
-        hero3_title: 'トラブルシューティングと<br>革新的問題解決',
-        hero3_desc: '電子回路分析および 3D CAD 精密設計能力',
+        hero3_title: '東洋未来大学 X 高尺スカイドーム',
+        hero3_desc: '国内最高水準のインフラを備えた文化・スポーツの中心地',
         dept_title: 'ロボットソフトウェア学科 学科紹介',
         dept_desc: '未来技術をリードする現場実務型人材の養成！C、C++、Pythonプログラミングからハードウェア回路設計、3D CADまで専門知識を体系的に学びます。',
         btn_school: '学校サイトへ ❯',

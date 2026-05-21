@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학교 근처 놀거리 - 동양미래대학교</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .map-hero {
+            padding: 120px 0 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4eaf7 100%);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 600px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .rankings-section {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #555;
+        }
+
+        .category-tab.active,
+        .category-tab:hover {
+            background: var(--primary-color, #002C5F);
+            color: #fff;
+            border-color: var(--primary-color, #002C5F);
+        }
+
+        .ranking-card {
+            display: flex;
+            align-items: flex-start;
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid var(--primary-color, #002C5F);
+        }
+
+        .ranking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .rank-number {
+            font-size: 38px;
+            font-weight: 700;
+            color: #ccc;
+            min-width: 65px;
+            text-align: center;
+            line-height: 1;
+            padding-top: 4px;
+        }
+
+        .rank-number.gold {
+            color: #FFD700;
+        }
+
+        .rank-number.silver {
+            color: #C0C0C0;
+        }
+
+        .rank-number.bronze {
+            color: #CD7F32;
+        }
+
+        .rank-content {
+            flex: 1;
+        }
+
+        .rank-content h3 {
+            margin: 0 0 6px 0;
+            font-size: 20px;
+            color: #111;
+        }
+
+        .rank-content p {
+            margin: 0 0 12px 0;
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .rank-meta {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .rank-meta span {
+            margin-right: 12px;
+        }
+
+        .rank-tags {
+            margin-top: 8px;
+        }
+
+        .rank-tag {
+            display: inline-block;
+            background: #eef5ff;
+            color: var(--primary-color, #002C5F);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 6px;
+            font-weight: 600;
+        }
+
+        .rank-tag.green {
+            background: #e8f8f0;
+            color: #1a7a44;
+        }
+
+        .rank-tag.purple {
+            background: #f5eeff;
+            color: #6a1aaa;
+        }
+
+        .rank-tag.red {
+            background: #fff0f0;
+            color: #aa1a1a;
+        }
+
+        .rank-tag.orange {
+            background: #fff6e8;
+            color: #aa5a00;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #eef5ff, #daeeff);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #3355aa;
+            border-left: 4px solid var(--primary-color, #002C5F);
+        }
+
+        .tip-box strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html">DONGYANG <span style="font-weight:300">MIRAE</span></a>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html#dept">학교 및 학과 소개</a></li>
+                    <li><a href="index.html#portfolio">나의 포트폴리오</a></li>
+                    <li><a href="index.html#company">관련 회사</a></li>
+                    <li><a href="restaurants.html">학교 근처 맛집</a></li>
+                    <li><a href="entertainment.html" style="color: var(--accent-color, #00a0e9);">학교 근처 놀거리</a></li>
+                    <li><a href="index.html#board">게시판</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="map-hero">
+            <div class="container">
+                <h1 style="font-size: 48px; margin-bottom: 15px; color: var(--primary-color, #002C5F);">🎮 학교 근처 놀거리 지도
+                </h1>
+                <p style="font-size: 18px; color: #555;">공강 시간 & 수업 끝나고 가볼 만한 동양미래대 주변 핫플레이스!</p>
+
+                <div class="map-container">
+                    <iframe
+                        src="https://map.naver.com/p/search/%EB%8F%99%EC%96%91%EB%AF%B8%EB%9E%98%EB%8C%80%ED%95%99%EA%B5%90%20%EA%B7%BC%EC%B2%98%20%EC%98%A4%EB%9D%BD%EC%8B%A4?searchType=place&c=16.00,0,0,0,dh"
+                        width="100%" height="100%" frameborder="0" style="border:none;" title="동양미래대 주변 놀거리"></iframe>
+                    <div
+                        style="position: absolute; bottom: 20px; right: 20px; background: #03c75a; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                        <a href="https://map.naver.com/p/search/%EB%8F%99%EC%96%91%EB%AF%B8%EB%9E%98%EB%8C%80%ED%95%99%EA%B5%90%20%EA%B7%BC%EC%B2%98%20%EC%98%A4%EB%9D%BD%EC%8B%A4?searchType=place"
+                            target="_blank"
+                            style="display: block; color: white; text-decoration: none; font-size: 15px; padding: 12px 20px; font-weight: 600;">
+                            네이버 지도 크게 보기 ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추천 놀거리 랭킹 -->
+        <section class="rankings-section">
+            <div class="container">
+                <div class="section-header" style="text-align:left; margin-bottom:30px;">
+                    <h2 style="font-size: 32px; border-bottom: 2px solid #eee; padding-bottom: 15px;">🏆 나의 개인적인 놀거리 TOP
+                        순위</h2>
+                </div>
+
+                <div class="category-tabs">
+                    <button class="category-tab active">전체</button>
+                    <button class="category-tab">🎳 실내 스포츠</button>
+                    <button class="category-tab">🎬 영화 / 공연</button>
+                    <button class="category-tab">🛒 쇼핑</button>
+                    <button class="category-tab">🌿 야외 / 공원</button>
+                    <button class="category-tab">🎮 게임 / 오락</button>
+                </div>
+
+                <!-- 1위 -->
+                <div class="ranking-card">
+                    <div class="rank-number gold">1</div>
+                    <div class="rank-content">
+                        <h3>⚾ 고척스카이돔</h3>
+                        <p>국내 유일의 돔 구장! <a href="https://heroesbaseball.co.kr/index.do" target="_blank" style="color: var(--primary-color); font-weight: 600; text-decoration: underline;">키움 히어로즈</a>의 홈 구장이며, 다양한 콘서트와 공연이 열립니다. 또한 복합문화공간인 <strong>서울아트책보고</strong>가 위치해 있어 야구 경기 외에도 전시와 독서를 즐길 수 있는 초대형 엔터테인먼트 공간입니다.</p>
+                        <div class="rank-meta">
+                            <span>📍 구로구 경인로 430</span>
+                            <span>🚶 도보 5분 이내</span>
+                        </div>
+                        <div class="rank-tags">
+                            <span class="rank-tag">야구</span>
+                            <span class="rank-tag purple">콘서트 / 공연</span>
+                            <span class="rank-tag green">접근성 최고</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2위 -->
+                <div class="ranking-card">
+                    <div class="rank-number silver">2</div>
+                    <div class="rank-content">
+                        <h3>🎨 벌툰 몽유도원 고척점</h3>
+                        <p>웹툰 캐릭터와 함께하는 이색 체험 공간! 고척스카이돔 근처에 위치해 있어 야구 경기 전후로 들르기 딱 좋습니다. 사진 찍기 좋고 친구들과 함께 즐기기 최고의
+                            핫플레이스.</p>
+                        <div class="rank-meta">
+                            <span>📍 고척스카이돔 인근</span>
+                            <span>🚶 도보 5분 이내</span>
+                        </div>
+                        <div class="rank-tags">
+                            <span class="rank-tag orange">체험 전시</span>
+                            <span class="rank-tag purple">데이트 코스</span>
+                            <span class="rank-tag">포토스팟</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3위 -->
+                <div class="ranking-card">
+                    <div class="rank-number bronze">3</div>
+                    <div class="rank-content">
+                        <h3>🏓 짱탁구장 고척스카이돔점</h3>
+                        <p>고척스카이돔 바로 옆에 있는 깔끔한 탁구장! 부담 없는 가격에 소모임이나 과 친구들과 함께 즐기기 좋습니다. 초보자도 쉽게 배울 수 있어 누구나 환영합니다.</p>
+                        <div class="rank-meta">
+                            <span>📍 고척스카이돔 인근</span>
+                            <span>🚶 도보 5분 이내</span>
+                        </div>
+                        <div class="rank-tags">
+                            <span class="rank-tag">탁구</span>
+                            <span class="rank-tag purple">단체 활동</span>
+                            <span class="rank-tag green">가성비</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4위 -->
+                <div class="ranking-card">
+                    <div class="rank-number" style="color:#6a5acd;">4</div>
+                    <div class="rank-content">
+                        <h3>🛒 신도림 디큐브시티 &amp; 테크노마트</h3>
+                        <p>쇼핑·식사·영화·게임 모든 것이 한 곳에! 신도림역 바로 앞이라 1호선 구일역에서 딱 1정거장이면 도착합니다. 공강 시간에 가볍게 쇼핑하거나 영화 한 편 보기에 딱 좋습니다.</p>
+                        <div class="rank-meta">
+                            <span>📍 구로구 경인로 662</span>
+                            <span>🚌 버스 3정거장</span>
+                            <span>🚇 1호선 1정거장 (구일역→신도림역)</span>
+                        </div>
+                        <div class="rank-tags">
+                            <span class="rank-tag orange">쇼핑</span>
+                            <span class="rank-tag">영화</span>
+                            <span class="rank-tag green">지하철 이용</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5위 -->
+                <div class="ranking-card">
+                    <div class="rank-number" style="color:#e87a00;">5</div>
+                    <div class="rank-content">
+                        <h3>🎳 GD 볼링장</h3>
+                        <p>학교 근처에서 가장 추천하는 볼링장! 저렴한 가격에 쾌적한 환경을 자랑합니다. 팀플 후 뒤풀이나 오리엔테이션 소모임 장소로 자주 이용되는 학생들의 단골 명소입니다.
+                        </p>
+                        <div class="rank-meta">
+                            <span>📍 학교 근처</span>
+                            <span>🚶 도보 10분</span>
+                        </div>
+                        <div class="rank-tags">
+                            <span class="rank-tag">볼링</span>
+                            <span class="rank-tag purple">단체 활동</span>
+                            <span class="rank-tag red">뒤풀이 장소</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 신입생 꿀팁!</strong>
+                    고척스카이돔 앞에 벌툰 몽유도원 + 짱탁구장이 함께 있어 하루 코스로 즐기기 최고예요!
+                    신도림 디큐브시티는 1호선 구일역에서 1정거장이라 이동이 아주 편리합니다.
+                </div>
+
+                <p style="text-align: center; color: #aaa; font-style: italic; margin-top: 30px; font-size: 14px;">본 순위는
+                    정승민 개인 경험을 기반으로 작성되었습니다! 여러분의 추천도 아래 게시판에 남겨주세요 🙌</p>
+            </div>
+        </section>
+
+
+        <!-- 커뮤니티 게시판 -->
+        <section class="board-section" id="entertainment-board"
+            style="padding-top: 40px; padding-bottom: 80px; background: #fdfdfd;">
+            <div class="container" style="max-width: 1000px; margin: 0 auto;">
+                <div class="section-header"
+                    style="justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px;">
+                    <h2 style="font-size: 28px;">💬 여러분들이 아는 놀거리도 공유해주세요!</h2>
+                    <button id="write-ent-btn" class="primary-btn" style="border:none; cursor:pointer;"
+                        aria-label="새 놀거리 추천하기">추천 글쓰기 ✎</button>
+                </div>
+                <div class="board-container" style="border: 1px solid #eaeaea; border-radius: 12px; padding: 10px;">
+                    <div class="board-list" id="ent-board-list">
+                        <div class="board-item loading" style="text-align:center; color:#888;">게시글을 불러오는 중입니다. 잠시만
+                            기다려주세요...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Write Post Modal -->
+    <div class="modal overlay" id="write-ent-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box">
+            <button class="close-btn write-ent-close" aria-label="창 닫기">✕</button>
+            <h2>나만의 놀거리 추천하기 🎉</h2>
+            <p style="margin-bottom: 20px;">직접 가봤거나 알고 있는 근처 놀거리를 학우들에게 소개해주세요!</p>
+            <form id="write-ent-form">
+                <input type="text" id="ent-post-title" placeholder="어떤 장소인가요? (장소명 필수)" required
+                    style="width:100%; padding:15px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; font-size:15px;"
+                    aria-label="제목">
+                <textarea id="ent-post-content" placeholder="어떤 점이 좋았는지 자유롭게 적어주세요!" required
+                    style="width:100%; height:140px; padding:15px; margin-bottom:20px; border:1px solid #ddd; border-radius:8px; font-size:15px; resize:none;"
+                    aria-label="내용"></textarea>
+                <button type="submit" class="primary-btn"
+                    style="width:100%; font-size:16px; border:none; cursor:pointer;">추천 등록하기</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Post Modal -->
+    <div class="modal overlay" id="view-ent-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box" style="text-align: left;">
+            <button class="close-btn view-ent-close" aria-label="창 닫기">✕</button>
+            <h2 id="view-ent-title" style="margin-bottom: 10px; font-size: 24px;">장소명</h2>
+            <p id="view-ent-date"
+                style="font-size: 14px; color: #888; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+            </p>
+            <div id="view-ent-content"
+                style="font-size: 16px; line-height: 1.6; min-height: 150px; white-space: pre-wrap;">
+                추천 내용이 여기에 표시됩니다.
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-contact">
+            <div class="container">
+                <div class="footer-contact-grid">
+                    <div class="footer-info-block">
+                        <h4 class="footer-block-title">🏫 동양미래대학교</h4>
+                        <ul class="footer-info-list">
+                            <li><span class="fi-icon">📍</span> 08221 서울시 구로구 경인로 445 ([구]고척동 62-160)</li>
+                            <li><span class="fi-icon">📞</span> TEL. <a href="tel:0226101700">02-2610-1700</a></li>
+                            <li><span class="fi-icon">📠</span> FAX. 02-2688-5494</li>
+                            <li><span class="fi-icon">🌐</span> <a href="https://www.dongyang.ac.kr"
+                                    target="_blank">www.dongyang.ac.kr</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-divider"></div>
+                    <div class="footer-info-block">
+                        <h4 class="footer-block-title">👤 정승민 (Choung Seungmin)</h4>
+                        <p class="footer-subtitle">로봇소프트웨어과 · 2027 신입생 도우미 🤖</p>
+                        <ul class="footer-info-list">
+                            <li><span class="fi-icon">📱</span> <a href="tel:01071509202">010-7150-9202</a></li>
+                            <li><span class="fi-icon">📧</span> <a
+                                    href="mailto:supern.min@gmail.com">supern.min@gmail.com</a></li>
+                            <li><span class="fi-icon">💼</span> <a href="https://my-web-6f7k.vercel.app/"
+                                    target="_blank">포트폴리오 웹사이트</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2027 동양미래대학교 - 로봇소프트웨어과 &amp; 정승민 포트폴리오</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Entertainment board logic (mirrors restaurant board pattern)
+        function loadEntBoard() {
+            const listEl = document.getElementById('ent-board-list');
+            if (!listEl || typeof db === 'undefined') return;
+            listEl.innerHTML = '<div class="board-item" style="text-align:center; color:#888;">로딩 중...</div>';
+            db.collection("ent_board_posts")
+                .orderBy("createdAt", "desc")
+                .limit(10)
+                .onSnapshot((snapshot) => {
+                    listEl.innerHTML = '';
+                    if (snapshot.empty) {
+                        listEl.innerHTML = '<div class="board-item" style="text-align:center; color:#888;">아직 추천된 놀거리가 없습니다. 첫 글을 작성해주세요!</div>';
+                        return;
+                    }
+                    snapshot.forEach((doc) => {
+                        const post = doc.data();
+                        const div = document.createElement('a');
+                        div.className = 'board-item';
+                        div.href = '#';
+                        div.style.cssText = 'text-decoration:none; color:inherit; cursor:pointer;';
+                        div.innerHTML = `<span class="title">🎉 ${post.title}</span><span class="date">${post.date}</span>`;
+                        div.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            document.getElementById('view-ent-title').textContent = post.title;
+                            document.getElementById('view-ent-date').textContent = post.date;
+                            document.getElementById('view-ent-content').textContent = post.content || '내용이 없습니다.';
+                            document.getElementById('view-ent-modal').classList.add('active');
+                        });
+                        listEl.appendChild(div);
+                    });
+                }, () => {
+                    listEl.innerHTML = '<div class="board-item" style="text-align:center; color:red;">데이터를 불러오는데 실패했습니다.</div>';
+                });
+        }
+        setTimeout(loadEntBoard, 1000);
+
+        // Write button
+        const writeEntBtn = document.getElementById('write-ent-btn');
+        const writeEntModal = document.getElementById('write-ent-modal');
+        const writeEntClose = document.querySelector('.write-ent-close');
+        const viewEntModal = document.getElementById('view-ent-modal');
+        const viewEntClose = document.querySelector('.view-ent-close');
+        const writeEntForm = document.getElementById('write-ent-form');
+
+        if (writeEntBtn) writeEntBtn.addEventListener('click', () => writeEntModal.classList.add('active'));
+        if (writeEntClose) writeEntClose.addEventListener('click', () => writeEntModal.classList.remove('active'));
+        if (viewEntClose) viewEntClose.addEventListener('click', () => viewEntModal.classList.remove('active'));
+
+        if (writeEntForm) {
+            writeEntForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('ent-post-title').value;
+                const content = document.getElementById('ent-post-content').value;
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+                try {
+                    await db.collection("ent_board_posts").add({
+                        title, content, date: dateStr,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    document.getElementById('ent-post-title').value = '';
+                    document.getElementById('ent-post-content').value = '';
+                    writeEntModal.classList.remove('active');
+                    setTimeout(() => alert('놀거리 추천이 등록되었습니다! 🎉'), 100);
+                } catch (err) {
+                    alert('등록에 실패했습니다. 잠시 후 다시 시도해주세요.');
+                }
+            });
+        }
+
+        // Category tab filter (UI only)
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
