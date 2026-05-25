@@ -37,6 +37,7 @@
                         <li><a href="#" data-lang="JP">JP</a></li>
                     </ul>
                 </div>
+                <button class="icon-btn theme-toggle" id="theme-toggle" aria-label="테마 전환" style="font-size: 18px; margin-right: 5px; transition: transform 0.3s; background: none; border: none; cursor: pointer;">☀️</button>
                 <button class="icon-btn user-btn">👤</button>
                 <button class="icon-btn search-btn">🔍</button>
                 <button class="icon-btn menu-btn">☰</button>
@@ -119,19 +120,46 @@
                     </div>
                     <a href="https://my-web-6f7k.vercel.app/" target="_blank" class="primary-btn" style="padding: 10px 25px;" aria-label="포트폴리오 전체 보기" data-i18n="btn_port_web">포트폴리오 웹사이트 가기 ❯</a>
                 </div>
-                <div class="portfolio-grid">
-                    <div class="portfolio-card">
+
+                <!-- Portfolio Filters -->
+                <div class="portfolio-filters" style="display: flex; gap: 12px; margin-top: 30px; justify-content: flex-start; flex-wrap: wrap;">
+                    <button class="filter-btn active" data-filter="all">전체보기</button>
+                    <button class="filter-btn" data-filter="hardware">하드웨어 회로 설계</button>
+                    <button class="filter-btn" data-filter="cad">3D CAD 구조 설계</button>
+                    <button class="filter-btn" data-filter="software">로봇 소프트웨어</button>
+                </div>
+
+                <div class="portfolio-grid" style="margin-top: 30px;">
+                    <div class="portfolio-card" data-category="hardware">
                         <img src="robot_arm_circuit.png" alt="자동화 로봇 암 제어 회로 설계 프로토타입">
                         <div class="card-info">
+                            <span class="card-category" style="font-size: 12px; font-weight: 700; color: var(--accent-color); text-transform: uppercase; margin-bottom: 5px; display: block;">하드웨어 회로 설계</span>
                             <h3>자동화 로봇 암 제어 회로 설계</h3>
                             <span style="font-size: 14px;">노이즈 99% 제거, 발열 40% 개선으로 오작동 완벽 해결</span>
                         </div>
                     </div>
-                    <div class="portfolio-card">
+                    <div class="portfolio-card" data-category="cad">
                         <img src="port2.jpg" alt="3D CAD 기반 로봇 하드웨어 도면 설계">
                         <div class="card-info">
+                            <span class="card-category" style="font-size: 12px; font-weight: 700; color: var(--accent-color); text-transform: uppercase; margin-bottom: 5px; display: block;">3D CAD 구조 설계</span>
                             <h3>3D CAD 기반 구조 개선 설계</h3>
                             <span style="font-size: 14px;">조립 시간 40% 단축 및 0.1mm 정밀도 확보</span>
+                        </div>
+                    </div>
+                    <div class="portfolio-card" data-category="software">
+                        <img src="robot_ai.png" alt="ROS2 기반 자율주행 서비스 로봇">
+                        <div class="card-info">
+                            <span class="card-category" style="font-size: 12px; font-weight: 700; color: var(--accent-color); text-transform: uppercase; margin-bottom: 5px; display: block;">로봇 소프트웨어</span>
+                            <h3>ROS2 자율주행 서비스 로봇</h3>
+                            <span style="font-size: 14px;">Lidar SLAM/Navigation 연동 및 장애물 동적 우회 최적화</span>
+                        </div>
+                    </div>
+                    <div class="portfolio-card" data-category="hardware">
+                        <img src="port1.jpg" alt="스마트 팩토리 PLC 제어">
+                        <div class="card-info">
+                            <span class="card-category" style="font-size: 12px; font-weight: 700; color: var(--accent-color); text-transform: uppercase; margin-bottom: 5px; display: block;">하드웨어 회로 설계</span>
+                            <h3>스마트 팩토리 PLC 제어 패널</h3>
+                            <span style="font-size: 14px;">시퀀스 제어 회로 구축 및 안전 오작동 방지 인터록 설계</span>
                         </div>
                     </div>
                 </div>
@@ -296,6 +324,25 @@
         </div>
     </div>
 
+    <!-- Welcome Popup Modal -->
+    <div class="modal overlay" id="welcome-modal" role="dialog" aria-modal="true">
+        <div class="modal-content login-box" style="text-align: center; max-width: 500px;">
+            <button class="close-btn welcome-close" aria-label="창 닫기">✕</button>
+            <div style="margin-bottom: 20px; display: flex; justify-content: center;">
+                <img src="welcome_mascot.png" alt="DMU 마스코트" style="width: 140px; height: auto; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 25px rgba(128, 0, 32, 0.35)); animation: popupFloat 4s ease-in-out infinite;">
+            </div>
+            <h2 style="margin-bottom: 15px;">🎉 환영합니다! 🎉</h2>
+            <p style="font-size: 15px; line-height: 1.6; margin-bottom: 25px; color: #444;" class="welcome-desc">
+                동양미래대학교 로봇소프트웨어과<br>
+                2027학년도 신입생을 위한 가이드 페이지에 오신 것을 환영합니다.<br><br>
+                다양한 정보와 팁을 확인해보세요!
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="primary-btn welcome-close-btn" style="width: auto; padding: 12px 40px; font-size: 16px;">확인</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div class="modal overlay" id="login-modal" role="dialog" aria-modal="true">
         <div class="modal-content login-box">
@@ -303,17 +350,10 @@
             <h2>Welcome Back</h2>
             <p>동양미래대학교 웹사이트에 오신 것을 환영합니다.</p>
             <form class="login-form">
-                <input type="text" placeholder="아이디" required aria-label="아이디">
-                <input type="password" placeholder="비밀번호" required aria-label="비밀번호">
+                <input type="text" id="login-name" placeholder="실명 2글자 이상 (예: 정승민)" required aria-label="실명 2글자 이상">
+                <input type="password" id="login-birth" placeholder="생년월일 6자리 (예: 070305)" required maxlength="6" inputmode="numeric" aria-label="생년월일 6자리">
                 <button type="submit" class="primary-btn login-submit">로그인</button>
             </form>
-            <div class="modal-links">
-                <a href="#">아이디 찾기</a>
-                <span class="divider">|</span>
-                <a href="#">비밀번호 찾기</a>
-                <span class="divider">|</span>
-                <a href="#">회원가입</a>
-            </div>
         </div>
     </div>
 
@@ -371,41 +411,41 @@
             <div class="menu-column">
                 <h3>학교소개</h3>
                 <ul>
-                    <li><a href="#">총장인사말</a></li>
-                    <li><a href="#">건학이념</a></li>
-                    <li><a href="#">연혁</a></li>
-                    <li><a href="#">캠퍼스 맵</a></li>
-                    <li><a href="#">오시는 길</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_01010100" target="_blank">총장인사말</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_01010200" target="_blank">건학이념</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_01010300" target="_blank">연혁</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_01050100" target="_blank">캠퍼스 맵</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_01050200" target="_blank">오시는 길</a></li>
                 </ul>
             </div>
             <div class="menu-column">
                 <h3>학과소개</h3>
                 <ul>
-                    <li><a href="#">로봇소프트웨어과</a></li>
-                    <li><a href="#">기계공학부</a></li>
-                    <li><a href="#">전기전자통신공학부</a></li>
-                    <li><a href="#">컴퓨터공학부</a></li>
-                    <li><a href="#">경영학부</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4495/subview.do" target="_blank">로봇소프트웨어과</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dongyang/133/subview.do" target="_blank">기계공학부</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4904/subview.do" target="_blank">전기전자통신공학부</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dongyang/139/subview.do" target="_blank">컴퓨터공학부</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4915/subview.do" target="_blank">경영학부</a></li>
                 </ul>
             </div>
             <div class="menu-column">
                 <h3>학교생활</h3>
                 <ul>
-                    <li><a href="#">학사일정</a></li>
-                    <li><a href="#">수강신청</a></li>
-                    <li><a href="#">장학안내</a></li>
-                    <li><a href="#">증명서 발급</a></li>
-                    <li><a href="#">학식 메뉴</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4709/subview.do" target="_blank">학사일정</a></li>
+                    <li><a href="https://dtis.dongyang.ac.kr" target="_blank">수강신청</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4726/subview.do" target="_blank">장학안내</a></li>
+                    <li><a href="https://cert.dongyang.ac.kr" target="_blank">증명서 발급</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4741/subview.do" target="_blank">학식 메뉴</a></li>
                 </ul>
             </div>
             <div class="menu-column">
                 <h3>포트폴리오 & 기업</h3>
                 <ul>
-                    <li><a href="#">Choung Seungmin</a></li>
-                    <li><a href="#">학생 우수작</a></li>
-                    <li><a href="#">산학협력단</a></li>
-                    <li><a href="#">가족회사 안내</a></li>
-                    <li><a href="#">취업 지원 센터</a></li>
+                    <li><a href="https://my-web-6f7k.vercel.app/" target="_blank">Choung Seungmin</a></li>
+                    <li><a href="https://my-web-6f7k.vercel.app/" target="_blank">학생 우수작</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_06010100" target="_blank">산학협력단</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/sites/dongyang/contents/main.do?fnctId=sitemenu&menuViewType=tab&menuId=dongyang_06020100" target="_blank">가족회사 안내</a></li>
+                    <li><a href="https://www.dongyang.ac.kr/dmu/4859/subview.do" target="_blank">취업 지원 센터</a></li>
                 </ul>
             </div>
         </div>

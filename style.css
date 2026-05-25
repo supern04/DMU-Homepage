@@ -1488,3 +1488,213 @@ ul {
         padding: 40px 30px;
     }
 }
+
+/* ==========================================================================
+   PREMIUM DARK THEME & ULTRA DESIGN UPGRADES
+   ========================================================================== */
+
+/* Dark Theme Token Overrides */
+body.dark-theme {
+    --primary-l: 8%;
+    --primary-color: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+    --bg-light: #0d1117;
+    --text-color: #c9d1d9;
+    --light-text: #8b949e;
+    --white: #161b22;
+    --glass-bg: rgba(22, 27, 34, 0.8);
+    --glass-border: rgba(240, 246, 252, 0.1);
+    --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-theme::before {
+    background-image: 
+        radial-gradient(circle at 20% 30%, hsla(var(--primary-h), 50%, 15%, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, hsla(197, 50%, 15%, 0.4) 0%, transparent 40%);
+}
+
+body.dark-theme::after {
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Theme Elements Override */
+body.dark-theme .header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .nav ul li a {
+    color: #f0f6fc;
+}
+
+body.dark-theme .nav ul li a:hover {
+    color: var(--accent-color);
+}
+
+body.dark-theme .company-card,
+body.dark-theme .login-box,
+body.dark-theme .chat-window,
+body.dark-theme .full-menu,
+body.dark-theme .search-overlay {
+    background: #161b22;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #f0f6fc;
+}
+
+body.dark-theme .chat-messages {
+    background: #0d1117;
+}
+
+body.dark-theme .chat-input-area {
+    background: #161b22;
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme #chat-input {
+    background: #0d1117;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f0f6fc;
+}
+
+body.dark-theme .company-roles {
+    background: #1f242c;
+    color: #c9d1d9;
+}
+
+body.dark-theme .company-roles strong {
+    color: #fff;
+}
+
+body.dark-theme .company-tags a {
+    background: #21262d;
+    border-color: #30363d;
+    color: #c9d1d9;
+}
+
+body.dark-theme .company-tags a:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #0d1117;
+}
+
+body.dark-theme .section-image-text h2,
+body.dark-theme .section-header h2,
+body.dark-theme .quick-access-header h2,
+body.dark-theme .footer-block-title,
+body.dark-theme .board-half h2 {
+    color: #ffffff;
+}
+
+body.dark-theme .board-item {
+    color: #c9d1d9;
+}
+
+body.dark-theme .board-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+body.dark-theme .search-bar {
+    border-color: #f0f6fc;
+}
+
+body.dark-theme .search-bar input {
+    background: transparent;
+    color: #fff;
+}
+
+body.dark-theme .menu-column h3 {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+body.dark-theme .menu-column ul li a {
+    color: #8b949e;
+}
+
+body.dark-theme .menu-column ul li a:hover {
+    color: var(--accent-color);
+}
+
+body.dark-theme .welcome-desc {
+    color: #c9d1d9 !important;
+}
+
+body.dark-theme .card-info {
+    background: rgba(22, 27, 34, 0.85);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #f0f6fc;
+}
+
+body.dark-theme .portfolio-card:hover .card-info {
+    background: #161b22;
+}
+
+body.dark-theme .icon-circle {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .icon-item:hover .icon-circle {
+    border-color: var(--accent-color);
+}
+
+/* Portfolio Filtering Styling */
+.filter-btn {
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 8px 20px -5px hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.3);
+}
+
+body.dark-theme .filter-btn {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+body.dark-theme .filter-btn.active, body.dark-theme .filter-btn:hover {
+    background: var(--accent-color);
+    color: #0d1117;
+    box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+/* Welcome Popup Float Animation */
+@keyframes popupFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(2deg);
+    }
+}
+
+/* Portfolio Card Premium Glow and 3D Tilt container */
+.portfolio-card {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.portfolio-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--border-radius-lg);
+    pointer-events: none;
+    border: 2px solid transparent;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.portfolio-card:hover::after {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 25px var(--accent-glow);
+}

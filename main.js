@@ -217,22 +217,65 @@ if (searchClose) searchClose.addEventListener('click', () => closeModal(searchOv
 if (menuBtn) menuBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(fullMenu); });
 if (menuClose) menuClose.addEventListener('click', () => closeModal(fullMenu));
 
-// Prevent form default on login
+// Prevent form default on login and validate inputs
 const loginForm = document.querySelector('.login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('로그인 기능은 준비 중입니다.');
-        closeModal(loginModal);
+        
+        const loginNameInput = document.getElementById('login-name');
+        const loginBirthInput = document.getElementById('login-birth');
+        
+        if (loginNameInput && loginBirthInput) {
+            const realName = loginNameInput.value.trim();
+            const birthDate = loginBirthInput.value.trim();
+            
+            // Validate Real Name is 2 or more characters
+            if (realName.length < 2) {
+                alert('아이디(실명 2글자 이상)를 올바르게 입력해주세요.');
+                loginNameInput.focus();
+                return;
+            }
+            
+            // Validate Birth Date is exactly 6 digits
+            const isSixDigits = /^[0-9]{6}$/.test(birthDate);
+            if (!isSixDigits) {
+                alert('비밀번호(생년월일 6자리)를 숫자로 올바르게 입력해주세요.');
+                loginBirthInput.focus();
+                return;
+            }
+            
+            // Success
+            alert(`로그인 되었습니다!\n동양미래대학교 방문을 환영합니다, ${realName}님!`);
+            closeModal(loginModal);
+            
+            // Premium Touch: Show user's name on the header profile button!
+            const userBtn = document.querySelector('.user-btn');
+            if (userBtn) {
+                userBtn.innerHTML = `👤 <span style="font-size: 13px; font-weight: 600; margin-left: 5px; color: var(--text-color); vertical-align: middle;">${realName}님</span>`;
+                userBtn.style.width = 'auto';
+                userBtn.style.padding = '0 12px';
+                userBtn.style.borderRadius = '20px';
+                userBtn.style.background = 'rgba(0, 127, 168, 0.15)';
+                userBtn.style.border = '1px solid rgba(0, 127, 168, 0.3)';
+            }
+            
+            // Clear inputs
+            loginNameInput.value = '';
+            loginBirthInput.value = '';
+        }
     });
 }
 
 // Modal links (Find ID/PW, Register) & Full Menu links
 document.querySelectorAll('.modal-links a, .full-menu-container a').forEach(link => {
     link.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('해당 메뉴는 현재 준비 중입니다. (상세 페이지 연결 예정)');
-        closeModal(fullMenu);
+        const href = link.getAttribute('href');
+        if (!href || href === '#' || href.startsWith('javascript:')) {
+            e.preventDefault();
+            alert('해당 메뉴는 현재 준비 중입니다. (상세 페이지 연결 예정)');
+            closeModal(fullMenu);
+        }
     });
 });
 
@@ -246,6 +289,29 @@ window.addEventListener('scroll', () => {
         scrollProgressBar.style.width = scrolled + '%';
     }
 });
+
+// Welcome Popup Logic
+const welcomeModal = document.getElementById('welcome-modal');
+const welcomeCloseBtns = document.querySelectorAll('.welcome-close, .welcome-close-btn');
+
+if (welcomeModal) {
+    // Show popup shortly after load
+    setTimeout(() => {
+        // Only show once per session to avoid annoying the user on every refresh
+        if (!sessionStorage.getItem('welcomeShown')) {
+            openModal(welcomeModal);
+            sessionStorage.setItem('welcomeShown', 'true');
+        }
+    }, 500);
+}
+
+if (welcomeCloseBtns) {
+    welcomeCloseBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            closeModal(welcomeModal);
+        });
+    });
+}
 
 // Category Click Handler & Extra Effects
 // (Already handled mostly by placeholder logic, but making it smoother)
@@ -627,7 +693,8 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// Search & Chatbot Features
+// ============================================
+// Premium Theme, Filtering, 3D Animations & Chatbot
 // ============================================
 
 // Search Functionality
@@ -644,9 +711,7 @@ function executeSearch() {
     }
 }
 
-if (searchBtnSubmit) {
-    searchBtnSubmit.addEventListener('click', executeSearch);
-}
+if (searchBtnSubmit) searchBtnSubmit.addEventListener('click', executeSearch);
 if (searchInput) {
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') executeSearch();
@@ -662,7 +727,104 @@ document.querySelectorAll('.popular-searches a').forEach(link => {
     });
 });
 
-// Chatbot Logic
+// 1. Dark Mode Toggle Logic
+const themeToggleBtn = document.getElementById('theme-toggle');
+
+function setTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        if (themeToggleBtn) {
+            themeToggleBtn.textContent = '🌙';
+            themeToggleBtn.style.transform = 'rotate(360deg)';
+        }
+    } else {
+        document.body.classList.remove('dark-theme');
+        if (themeToggleBtn) {
+            themeToggleBtn.textContent = '☀️';
+            themeToggleBtn.style.transform = 'rotate(0deg)';
+        }
+    }
+    localStorage.setItem('dmu_theme', theme);
+}
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+        setTheme(currentTheme);
+    });
+}
+
+// Load Saved Theme Preference on Load
+window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('dmu_theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    } else {
+        setTheme('light');
+    }
+});
+
+// 2. Portfolio Filtering Logic
+const filterButtons = document.querySelectorAll('.filter-btn');
+const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+if (filterButtons && portfolioCards) {
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            btn.classList.add('active');
+            
+            const filterValue = btn.getAttribute('data-filter');
+            
+            portfolioCards.forEach(card => {
+                // Fade out card first
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8)';
+                
+                setTimeout(() => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }, 300);
+            });
+        });
+    });
+}
+
+// 3. 3D Tilt Card Animation Logic
+if (portfolioCards) {
+    portfolioCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left; // x position within card
+            const y = e.clientY - rect.top;  // y position within card
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((centerY - y) / centerY) * 10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+        });
+        
+        card.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease';
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+    });
+}
+
+// 4. Intelligent Keyword-Matching Chatbot
 const chatbotBtn = document.getElementById('chatbot-btn');
 const chatWindow = document.getElementById('chat-window');
 const closeChat = document.getElementById('close-chat');
@@ -683,20 +845,45 @@ if (closeChat) {
 }
 
 const botReplies = [
-    "현재 등록기간이 아닙니다. 학사일정을 확인해주세요.",
-    "자세한 사항은 학과 사무실(02-2610-XXXX)로 문의 바랍니다.",
+    "자세한 사항은 학과 사무실(02-2610-1700)로 문의 바랍니다.",
     "관련 서류는 학교 홈페이지 통합정보시스템에서 출력 가능합니다.",
-    "장학금 신청은 매 학기 초 공지사항을 확인해주세요.",
     "네, 맞습니다. 추가로 궁금한 점이 있으신가요?",
     "입력하신 내용에 대한 답변을 준비 중입니다.",
     "동양미래대학교 입학처 홈페이지를 참고하시면 도움이 됩니다."
 ];
 
+function getSmartReply(userMessage) {
+    const text = userMessage.toLowerCase();
+    
+    if (text.includes('장학') || text.includes('장학금')) {
+        return "💰 **로봇소프트웨어과 장학금 안내**\n학과 성적 우수 장학금 및 실습 우수 장학금은 매 학기 초 신청을 받습니다. 성적평점평균(F학점 없이 12학점 이상 이수)과 전공 실습 성과를 토대로 선발되니 공지사항을 놓치지 마세요!";
+    }
+    if (text.includes('수강') || text.includes('신청') || text.includes('학점') || text.includes('수업') || text.includes('시간표')) {
+        return "📚 **수강신청 안내**\n2027학년도 1학기 수강신청은 2월 중순에 진행됩니다. 1학년 신입생분들은 필수 지정 과목(전공기초, 교양필수)이 자동 등록되므로, 학과 OT의 지도에 맞춰 안전하게 신청하시면 됩니다.";
+    }
+    if (text.includes('맛집') || text.includes('식당') || text.includes('먹을') || text.includes('밥') || text.includes('학식')) {
+        return "🍜 **대학생 추천 맛집**\n[학교 근처 맛집] 페이지를 참고해보세요! 27학번 도우미 정승민 선배가 직접 방문하고 선별한 고척스카이돔 및 학교 주변 최고의 밥집(돈까스, 마라탕, 중식당 등)이 별점과 함께 정리되어 있습니다!";
+    }
+    if (text.includes('놀') || text.includes('놀거리') || text.includes('공강') || text.includes('피시') || text.includes('노래방') || text.includes('카페')) {
+        return "🎮 **공강 추천 놀거리**\n시간 때우기 가장 좋은 스팟을 찾으시나요? [학교 근처 놀거리] 페이지로 가시면 동양미래대 학생들이 가장 애용하는 핫플레이스(코노, 피시방, 보드게임카페, 고척돔 인근 산책로)가 엄선되어 있습니다!";
+    }
+    if (text.includes('정승민') || text.includes('승민') || text.includes('개발') || text.includes('포트폴리오') || text.includes('제작')) {
+        return "👤 **개발자 정승민 학생 소개**\n이 가이드 사이트를 구축한 로봇소프트웨어과 정승민 학생은 AMK CE(Customer Engineer) 후보자입니다. 자동화 로봇 암 제어 회로 설계(노이즈 99% 차단) 및 3D CAD 정밀 구조 개선 능력을 지닌 실무형 엔지니어입니다. 문의: supern.min@gmail.com";
+    }
+    if (text.includes('로봇') || text.includes('학과') || text.includes('소프트웨어') || text.includes('로봇소프트웨어과')) {
+        return "🤖 **로봇소프트웨어과 소개**\n4차 산업혁명의 핵심인 지능형 로봇 전문가 양성을 목표로 합니다! C/C++/Python 코딩은 물론, MCU 제어, 하드웨어 전장 회로 설계, 3D CAD 구조 설계 및 ROS2 자율주행까지 연계하는 명품 학과입니다.";
+    }
+    if (text.includes('연락') || text.includes('전화') || text.includes('메일') || text.includes('주소') || text.includes('위치') || text.includes('지도')) {
+        return "📍 **대학 정보 및 위치**\n- 주소: 서울특별시 구로구 경인로 445 (고척스카이돔 바로 옆)\n- 대표번호: 02-2610-1700\n- 정승민(도우미) 메일: supern.min@gmail.com";
+    }
+    
+    return botReplies[Math.floor(Math.random() * botReplies.length)];
+}
+
 function sendChatMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
     
-    // Add User Message
     const userMsg = document.createElement('div');
     userMsg.className = 'message user';
     userMsg.textContent = text;
@@ -705,15 +892,26 @@ function sendChatMessage() {
     chatInput.value = '';
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
-    // Fake Bot Response
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'message bot typing';
+    typingIndicator.textContent = '...';
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
     setTimeout(() => {
+        if (typingIndicator.parentNode) {
+            typingIndicator.parentNode.removeChild(typingIndicator);
+        }
+        
         const botMsg = document.createElement('div');
         botMsg.className = 'message bot';
-        const reply = botReplies[Math.floor(Math.random() * botReplies.length)];
-        botMsg.textContent = reply;
+        
+        const reply = getSmartReply(text);
+        botMsg.innerHTML = reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        
         chatMessages.appendChild(botMsg);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 1000);
+    }, 800);
 }
 
 if (chatSend) chatSend.addEventListener('click', sendChatMessage);
