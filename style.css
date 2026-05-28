@@ -926,15 +926,25 @@ ul {
     display: inline-block;
 }
 
-.lang-menu {
+.lang-dropdown::after {
+    content: '';
     position: absolute;
     top: 100%;
     left: 0;
+    width: 100%;
+    height: 20px;
+}
+
+.lang-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: -10px;
     background: #fff;
     min-width: 80px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
-    display: none;
+    display: flex;
+    visibility: hidden;
     flex-direction: column;
     padding: 5px 0;
     opacity: 0;
@@ -943,7 +953,7 @@ ul {
 }
 
 .lang-dropdown:hover .lang-menu {
-    display: flex;
+    visibility: visible;
     opacity: 1;
     transform: translateY(0);
 }

@@ -206,8 +206,33 @@ function closeModal(element) {
 }
 
 // User (Login) Modal
-if (userBtn) userBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(loginModal); });
+if (userBtn) userBtn.addEventListener('click', (e) => { 
+    e.preventDefault(); 
+    if (window.isLoggedIn) {
+        alert('이미 로그인 되어 있습니다.');
+        return;
+    }
+    openModal(loginModal); 
+});
 if (loginClose) loginClose.addEventListener('click', () => closeModal(loginModal));
+
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if(confirm('로그아웃 하시겠습니까?')) {
+        window.isLoggedIn = false;
+        alert('로그아웃 되었습니다.');
+        if (userBtn) {
+            userBtn.innerHTML = '👤';
+            userBtn.style.width = '';
+            userBtn.style.padding = '';
+            userBtn.style.borderRadius = '';
+            userBtn.style.background = 'none';
+            userBtn.style.border = 'none';
+        }
+        logoutBtn.style.display = 'none';
+    }
+});
 
 // Search Overlay
 if (searchBtn) searchBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(searchOverlay); });
@@ -248,6 +273,7 @@ if (loginForm) {
             // Success
             alert(`로그인 되었습니다!\n동양미래대학교 방문을 환영합니다, ${realName}님!`);
             closeModal(loginModal);
+            window.isLoggedIn = true;
             
             // Premium Touch: Show user's name on the header profile button!
             const userBtn = document.querySelector('.user-btn');
@@ -259,6 +285,8 @@ if (loginForm) {
                 userBtn.style.background = 'rgba(0, 127, 168, 0.15)';
                 userBtn.style.border = '1px solid rgba(0, 127, 168, 0.3)';
             }
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) logoutBtn.style.display = 'inline-block';
             
             // Clear inputs
             loginNameInput.value = '';
@@ -410,7 +438,15 @@ const writeClose = document.querySelector('.write-close');
 const writePostBtn = document.getElementById('write-post-btn');
 const writeForm = document.getElementById('write-form');
 
-if(writePostBtn) writePostBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(writeModal); });
+if(writePostBtn) writePostBtn.addEventListener('click', (e) => { 
+    e.preventDefault(); 
+    if (!window.isLoggedIn) {
+        alert("로그인 후 이용하실 수 있습니다.");
+        openModal(loginModal);
+        return;
+    }
+    openModal(writeModal); 
+});
 if(writeClose) writeClose.addEventListener('click', () => closeModal(writeModal));
 
 if(writeForm) {
